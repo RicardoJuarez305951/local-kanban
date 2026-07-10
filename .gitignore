@@ -11,6 +11,7 @@
 *.log
 npm-debug.log*
 /.browser-profile-*/
+/my_projects
 
 # Configuración local de editores
 /.vscode/
@@ -20,3 +21,4 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 Desktop.ini
+
