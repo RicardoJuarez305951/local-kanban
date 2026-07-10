@@ -1,0 +1,22 @@
+# Datos y respaldos locales opcionales
+/local-data/
+/backups/
+/exports/
+*.local-kanban.json
+*.local-kanban.backup.json
+
+# Dependencias, cobertura y archivos temporales
+/node_modules/
+/coverage/
+*.log
+npm-debug.log*
+/.browser-profile-*/
+
+# Configuración local de editores
+/.vscode/
+/.idea/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
