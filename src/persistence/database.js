@@ -1,7 +1,8 @@
-export const DATABASE_NAME = "local-kanban";
-export const DATABASE_VERSION = 1;
+(function registerDatabase(namespace) {
+const DATABASE_NAME = "local-kanban";
+const DATABASE_VERSION = 1;
 
-export const STORES = Object.freeze({
+const STORES = Object.freeze({
   projects: "projects",
   columns: "columns",
   tasks: "tasks",
@@ -31,7 +32,7 @@ function createSchema(database) {
   database.createObjectStore(STORES.settings, { keyPath: "key" });
 }
 
-export function requestToPromise(request) {
+function requestToPromise(request) {
   return new Promise((resolve, reject) => {
     request.addEventListener("success", () => resolve(request.result), { once: true });
     request.addEventListener(
@@ -42,7 +43,7 @@ export function requestToPromise(request) {
   });
 }
 
-export function transactionDone(transaction) {
+function transactionDone(transaction) {
   return new Promise((resolve, reject) => {
     transaction.addEventListener("complete", () => resolve(), { once: true });
     transaction.addEventListener(
@@ -58,7 +59,7 @@ export function transactionDone(transaction) {
   });
 }
 
-export function openDatabase(options = {}) {
+function openDatabase(options = {}) {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
 
@@ -87,7 +88,7 @@ export function openDatabase(options = {}) {
   });
 }
 
-export async function performTransaction(database, storeNames, mode, operation) {
+async function performTransaction(database, storeNames, mode, operation) {
   const transaction = database.transaction(storeNames, mode);
   const stores = Object.fromEntries(
     storeNames.map((storeName) => [storeName, transaction.objectStore(storeName)]),
@@ -109,7 +110,7 @@ export async function performTransaction(database, storeNames, mode, operation) 
   }
 }
 
-export async function executeRequest(database, storeName, mode, createRequest) {
+async function executeRequest(database, storeName, mode, createRequest) {
   const transaction = database.transaction(storeName, mode);
   const completion = transactionDone(transaction);
   try {
@@ -121,3 +122,15 @@ export async function executeRequest(database, storeName, mode, createRequest) {
     throw error;
   }
 }
+
+Object.assign(namespace.persistence, {
+  DATABASE_NAME,
+  DATABASE_VERSION,
+  STORES,
+  requestToPromise,
+  transactionDone,
+  openDatabase,
+  performTransaction,
+  executeRequest,
+});
+})(globalThis.LocalKanban);

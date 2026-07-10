@@ -1,24 +1,22 @@
-import { installGlobalErrorHandlers, toUserMessage } from "./errors.js";
-import { createStore } from "./state.js";
-import { ProjectService } from "../domain/project-service.js";
-import { ValidationError } from "../domain/validation.js";
-import { openDatabase } from "../persistence/database.js";
-import { createProjectUnitOfWork } from "../persistence/project-unit-of-work.js";
-import { createColumnRepository } from "../persistence/repositories/columns.js";
-import { createProjectRepository } from "../persistence/repositories/projects.js";
-import { createSettingsRepository } from "../persistence/repositories/settings.js";
-import { createTaskRepository } from "../persistence/repositories/tasks.js";
-import { renderBoard } from "../ui/board.js";
-import { renderFeedback, renderViewState } from "../ui/feedback.js";
-import { renderProjects } from "../ui/projects.js";
-import {
+(function registerApplication(namespace) {
+const { installGlobalErrorHandlers, toUserMessage, createStore } = namespace.core;
+const { ProjectService, ValidationError } = namespace.domain;
+const { openDatabase, createProjectUnitOfWork } = namespace.persistence;
+const {
+  createColumnRepository,
+  createProjectRepository,
+  createSettingsRepository,
+  createTaskRepository,
+} = namespace.persistence.repositories;
+const { renderBoard, renderFeedback, renderViewState, renderProjects } = namespace.ui;
+const {
   bindShell,
   focusProjectField,
   resetProjectForm,
   setInteractionState,
-} from "../ui/shell.js";
+} = namespace.ui;
 
-export async function bootstrapApplication(shell) {
+async function bootstrapApplication(shell) {
   const store = createStore();
 
   const reportError = (error) => {
@@ -89,3 +87,6 @@ export async function bootstrapApplication(shell) {
     reportError(error);
   }
 }
+
+namespace.core.bootstrapApplication = bootstrapApplication;
+})(globalThis.LocalKanban);

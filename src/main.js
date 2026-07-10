@@ -1,5 +1,6 @@
-import { bootstrapApplication } from "./core/app.js";
-import { getShell } from "./ui/shell.js";
+(function startApplication(namespace) {
+const { bootstrapApplication } = namespace.core;
+const { getShell } = namespace.ui;
 
 const shell = getShell();
 
@@ -11,3 +12,4 @@ bootstrapApplication(shell).catch((error) => {
   shell.statusBanner.textContent =
     "No se pudo iniciar la aplicación. Revisa la consola del navegador.";
 });
+})(globalThis.LocalKanban);

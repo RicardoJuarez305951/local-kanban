@@ -10,21 +10,17 @@ filtros, respaldos ni PWA.
 
 ## Ejecutar la aplicación
 
-Requisitos: un navegador moderno y Python 3.
+Clona o descarga el repositorio y abre `index.html` con doble clic. La aplicación no requiere
+servidor, instalación, build, conexión a internet ni dependencias de ejecución.
 
-```powershell
-python -m http.server 4173
-```
-
-Abre <http://localhost:4173>. Usa siempre ese origen para conservar la misma base IndexedDB.
-También puede iniciarse con `npm.cmd run serve` en PowerShell.
-
-No abras `index.html` directamente con `file://`: los módulos ES y el origen de IndexedDB requieren
-un servidor estático.
+Los scripts se cargan directamente desde el repositorio mediante `file://`. Mantén el repositorio
+en la misma ruta absoluta y usa el mismo navegador y perfil para seguir viendo la misma base local.
+Mover la carpeta o abrirla desde otro perfil puede crear un almacén IndexedDB independiente.
 
 ## Pruebas automatizadas
 
-Las pruebas de dominio usan únicamente el runner incluido en Node.js:
+Las pruebas de dominio son opcionales para desarrollo y usan únicamente el runner incluido en
+Node.js. No requieren instalar paquetes:
 
 ```powershell
 npm.cmd test
@@ -35,7 +31,7 @@ cinco columnas con sus tipos internos y orden estable.
 
 ## Pruebas manuales de la fase
 
-1. Abre la aplicación sin datos y comprueba que aparece el estado para crear el primer proyecto,
+1. Abre `index.html` directamente sin servidor y comprueba que aparece el estado para crear el primer proyecto,
    sin errores en la consola.
 2. Envía un nombre compuesto solo por espacios y comprueba que se muestra la validación.
 3. Crea un proyecto con nombre, descripción, repositorio y ruta local. Deben aparecer las columnas
@@ -59,6 +55,7 @@ navegador. La aplicación no incluye todavía una acción destructiva para hacer
 UI → estado central → servicios de dominio → repositorios/transacciones → IndexedDB
 ```
 
+- `src/namespace.js`: crea el único namespace global `LocalKanban`.
 - `src/core`: inicialización, estado observable y manejo de errores.
 - `src/domain`: validación, modelos y coordinación de casos de uso.
 - `src/persistence`: esquema IndexedDB, repositorios y unidad de trabajo transaccional.
@@ -79,3 +76,18 @@ depender de sus nombres visibles.
 
 La ruta local y la referencia de repositorio son texto informativo. La aplicación no intenta
 acceder al sistema de archivos ni conectarse a servicios externos.
+
+## Datos locales y Git
+
+IndexedDB pertenece al perfil del navegador y se guarda fuera del repositorio, por lo que Git no
+puede leer ni versionar los proyectos. El archivo `.gitignore` reserva `local-data/`, `backups/` y
+`exports/` para copias manuales o una futura función de exportación, y también ignora archivos
+`*.local-kanban.json`.
+
+Los navegadores no estandarizan completamente el almacenamiento para direcciones `file://`. La
+aplicación está orientada a navegadores modernos; antes de mover el repositorio o cambiar de perfil,
+conserva un respaldo cuando la función de exportación esté disponible.
+
+La carga directa y la persistencia se han verificado en Chrome y Edge. Firefox admite los scripts
+clásicos, pero su política de almacenamiento para archivos locales puede variar entre versiones;
+comprueba la persistencia con un proyecto de prueba antes de guardar información importante.

@@ -1,10 +1,20 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { createDefaultColumns } from "../src/domain/column-model.js";
-import { createProject } from "../src/domain/project-model.js";
-import { normalizeProjectInput, ValidationError } from "../src/domain/validation.js";
-import { createId } from "../src/shared/ids.js";
+await import("../src/namespace.js");
+await import("../src/shared/ids.js");
+await import("../src/shared/dates.js");
+await import("../src/domain/validation.js");
+await import("../src/domain/project-model.js");
+await import("../src/domain/column-model.js");
+
+const { createId } = globalThis.LocalKanban.shared;
+const {
+  createDefaultColumns,
+  createProject,
+  normalizeProjectInput,
+  ValidationError,
+} = globalThis.LocalKanban.domain;
 
 test("rechaza nombres de proyecto vacíos", () => {
   assert.throws(

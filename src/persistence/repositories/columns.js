@@ -1,6 +1,7 @@
-import { executeRequest, STORES } from "../database.js";
+(function registerColumnRepository(namespace) {
+const { executeRequest, STORES } = namespace.persistence;
 
-export function createColumnRepository(database) {
+function createColumnRepository(database) {
   return {
     async get(id) {
       const result = await executeRequest(database, STORES.columns, "readonly", (store) =>
@@ -38,3 +39,6 @@ export function createColumnRepository(database) {
     },
   };
 }
+
+namespace.persistence.repositories.createColumnRepository = createColumnRepository;
+})(globalThis.LocalKanban);

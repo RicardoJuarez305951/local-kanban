@@ -1,7 +1,7 @@
-import { createDefaultColumns } from "./column-model.js";
-import { createProject } from "./project-model.js";
+(function registerProjectService(namespace) {
+const { createDefaultColumns, createProject } = namespace.domain;
 
-export class ProjectService {
+class ProjectService {
   constructor({ projects, columns, tasks, settings, unitOfWork }) {
     this.projects = projects;
     this.columns = columns;
@@ -49,3 +49,6 @@ export class ProjectService {
     return { activeProject: project, columns, tasks };
   }
 }
+
+namespace.domain.ProjectService = ProjectService;
+})(globalThis.LocalKanban);

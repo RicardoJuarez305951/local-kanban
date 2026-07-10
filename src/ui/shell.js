@@ -1,3 +1,4 @@
+(function registerShell(namespace) {
 function requiredElement(id) {
   const element = document.getElementById(id);
   if (!element) {
@@ -6,7 +7,7 @@ function requiredElement(id) {
   return element;
 }
 
-export function getShell() {
+function getShell() {
   return {
     app: requiredElement("app"),
     projectForm: requiredElement("project-form"),
@@ -26,7 +27,7 @@ export function getShell() {
   };
 }
 
-export function bindShell(shell, handlers) {
+function bindShell(shell, handlers) {
   shell.projectForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(shell.projectForm);
@@ -44,7 +45,7 @@ export function bindShell(shell, handlers) {
   shell.focusProjectForm.addEventListener("click", () => shell.projectName.focus());
 }
 
-export function setInteractionState(shell, loading) {
+function setInteractionState(shell, loading) {
   shell.app.setAttribute("aria-busy", String(loading));
   shell.createProjectButton.disabled = loading;
   shell.projectList.querySelectorAll("button").forEach((button) => {
@@ -52,11 +53,20 @@ export function setInteractionState(shell, loading) {
   });
 }
 
-export function resetProjectForm(shell) {
+function resetProjectForm(shell) {
   shell.projectForm.reset();
   shell.projectName.focus();
 }
 
-export function focusProjectField(shell, field) {
+function focusProjectField(shell, field) {
   shell.projectForm.elements.namedItem(field)?.focus();
 }
+
+Object.assign(namespace.ui, {
+  getShell,
+  bindShell,
+  setInteractionState,
+  resetProjectForm,
+  focusProjectField,
+});
+})(globalThis.LocalKanban);

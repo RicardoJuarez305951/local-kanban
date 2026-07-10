@@ -1,6 +1,7 @@
-import { executeRequest, STORES } from "../database.js";
+(function registerSettingsRepository(namespace) {
+const { executeRequest, STORES } = namespace.persistence;
 
-export function createSettingsRepository(database) {
+function createSettingsRepository(database) {
   return {
     async get(key) {
       const setting = await executeRequest(database, STORES.settings, "readonly", (store) =>
@@ -28,3 +29,6 @@ export function createSettingsRepository(database) {
     },
   };
 }
+
+namespace.persistence.repositories.createSettingsRepository = createSettingsRepository;
+})(globalThis.LocalKanban);

@@ -1,6 +1,7 @@
-import { executeRequest, STORES } from "../database.js";
+(function registerTaskRepository(namespace) {
+const { executeRequest, STORES } = namespace.persistence;
 
-export function createTaskRepository(database) {
+function createTaskRepository(database) {
   return {
     async get(id) {
       const result = await executeRequest(database, STORES.tasks, "readonly", (store) =>
@@ -45,3 +46,6 @@ export function createTaskRepository(database) {
     },
   };
 }
+
+namespace.persistence.repositories.createTaskRepository = createTaskRepository;
+})(globalThis.LocalKanban);

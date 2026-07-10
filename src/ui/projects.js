@@ -1,3 +1,4 @@
+(function registerProjectsUi(namespace) {
 function createProjectButton(project, isActive) {
   const button = document.createElement("button");
   button.type = "button";
@@ -27,7 +28,7 @@ function createProjectButton(project, isActive) {
   return button;
 }
 
-export function renderProjects(shell, projects, activeProject) {
+function renderProjects(shell, projects, activeProject) {
   const fragment = document.createDocumentFragment();
 
   if (projects.length === 0) {
@@ -44,3 +45,6 @@ export function renderProjects(shell, projects, activeProject) {
   shell.projectList.replaceChildren(fragment);
   shell.projectCount.textContent = String(projects.length);
 }
+
+namespace.ui.renderProjects = renderProjects;
+})(globalThis.LocalKanban);

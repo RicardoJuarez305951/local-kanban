@@ -1,6 +1,7 @@
-import { performTransaction, requestToPromise, STORES } from "./database.js";
+(function registerProjectUnitOfWork(namespace) {
+const { performTransaction, requestToPromise, STORES } = namespace.persistence;
 
-export function createProjectUnitOfWork(database) {
+function createProjectUnitOfWork(database) {
   return {
     async createProjectGraph(project, columns) {
       await performTransaction(
@@ -22,3 +23,6 @@ export function createProjectUnitOfWork(database) {
     },
   };
 }
+
+namespace.persistence.createProjectUnitOfWork = createProjectUnitOfWork;
+})(globalThis.LocalKanban);

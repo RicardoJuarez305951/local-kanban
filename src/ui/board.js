@@ -1,3 +1,4 @@
+(function registerBoardUi(namespace) {
 function appendMetadata(container, label, value) {
   if (!value) return;
 
@@ -38,7 +39,7 @@ function createColumn(column, tasks) {
   return section;
 }
 
-export function renderBoard(shell, activeProject, columns, tasks) {
+function renderBoard(shell, activeProject, columns, tasks) {
   if (!activeProject) {
     shell.activeProjectName.textContent = "";
     shell.activeProjectDescription.textContent = "";
@@ -61,3 +62,6 @@ export function renderBoard(shell, activeProject, columns, tasks) {
   columns.forEach((column) => columnsFragment.append(createColumn(column, tasks)));
   shell.board.replaceChildren(columnsFragment);
 }
+
+namespace.ui.renderBoard = renderBoard;
+})(globalThis.LocalKanban);

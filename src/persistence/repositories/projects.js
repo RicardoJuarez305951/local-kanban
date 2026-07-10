@@ -1,6 +1,7 @@
-import { executeRequest, STORES } from "../database.js";
+(function registerProjectRepository(namespace) {
+const { executeRequest, STORES } = namespace.persistence;
 
-export function createProjectRepository(database) {
+function createProjectRepository(database) {
   return {
     async get(id) {
       const result = await executeRequest(
@@ -39,3 +40,6 @@ export function createProjectRepository(database) {
     },
   };
 }
+
+namespace.persistence.repositories.createProjectRepository = createProjectRepository;
+})(globalThis.LocalKanban);
