@@ -10,7 +10,11 @@
       return "No hay espacio disponible para guardar los datos locales.";
     }
 
-    return "Ocurrió un error al trabajar con los datos locales. Intenta de nuevo.";
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+
+    return "Ocurrio un error al trabajar con los datos locales. Intenta de nuevo.";
   }
 
   function installGlobalErrorHandlers(onError) {

@@ -10,6 +10,6 @@ bootstrapApplication(shell).catch((error) => {
   shell.statusBanner.hidden = false;
   shell.statusBanner.dataset.type = "error";
   shell.statusBanner.textContent =
-    "No se pudo iniciar la aplicación. Revisa la consola del navegador.";
+    "No se pudo iniciar la aplicacion. Revisa la consola del navegador.";
 });
 })(globalThis.LocalKanban);

@@ -37,7 +37,7 @@ class ProjectService {
     const project = await this.projects.get(projectId);
 
     if (!project || project.archived) {
-      throw new Error("El proyecto seleccionado no existe o está archivado.");
+      throw new Error("El proyecto seleccionado no existe o esta archivado.");
     }
 
     const [columns, tasks] = await Promise.all([

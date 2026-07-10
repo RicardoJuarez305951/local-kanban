@@ -1,10 +1,13 @@
 (function registerState(namespace) {
   const INITIAL_STATE = Object.freeze({
+    graphs: [],
     projects: [],
     activeProject: null,
     columns: [],
     tasks: [],
-    loading: true,
+    dirtyProjectIds: [],
+    taskEditor: { open: false, taskId: null, columnId: null },
+    loading: false,
     error: null,
   });
 

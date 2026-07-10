@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Kanban personal multi-proyecto con persistencia local."
+      content="Kanban personal multi-proyecto con proyectos JSON editables."
     />
     <title>Kanban local</title>
     <link rel="stylesheet" href="./styles/app.css" />
@@ -37,7 +37,7 @@
           <label for="project-name">Nombre <span aria-hidden="true">*</span></label>
           <input id="project-name" name="name" type="text" maxlength="120" required />
 
-          <label for="project-description">Descripción</label>
+          <label for="project-description">Descripcion</label>
           <textarea
             id="project-description"
             name="description"
@@ -61,7 +61,7 @@
           </button>
         </form>
 
-        <p class="local-note">Los datos permanecen en este navegador.</p>
+        <p class="local-note">Carga JSON desde my_projects y guarda descargando archivos.</p>
       </aside>
 
       <main class="main-content">
@@ -69,14 +69,14 @@
 
         <section id="loading-view" class="center-state" aria-live="polite">
           <p class="eyebrow">Preparando espacio</p>
-          <h2>Cargando tus proyectos…</h2>
+          <h2>Cargando tus proyectos...</h2>
         </section>
 
         <section id="empty-view" class="center-state" hidden>
-          <span class="empty-icon" aria-hidden="true">＋</span>
-          <p class="eyebrow">Empieza aquí</p>
-          <h2>Crea tu primer proyecto</h2>
-          <p>Organiza cada iniciativa en un tablero independiente.</p>
+          <span class="empty-icon" aria-hidden="true">+</span>
+          <p class="eyebrow">Empieza aqui</p>
+          <h2>Carga JSON o crea un proyecto</h2>
+          <p>Usa archivos editables desde la carpeta my_projects.</p>
           <button id="focus-project-form" class="secondary-button" type="button">
             Crear un proyecto
           </button>
@@ -89,33 +89,104 @@
               <h2 id="active-project-name"></h2>
               <p id="active-project-description" class="project-description" hidden></p>
             </div>
-            <dl id="project-metadata" class="project-metadata"></dl>
+            <div class="workspace-header__side">
+              <div class="workspace-actions" aria-label="Acciones del proyecto">
+                <button
+                  id="export-project-button"
+                  class="secondary-button compact-action"
+                  type="button"
+                  title="Guardar proyecto activo como JSON"
+                  aria-label="Guardar proyecto activo como JSON"
+                >Guardar proyecto</button>
+                <button
+                  id="export-all-button"
+                  class="secondary-button compact-action"
+                  type="button"
+                  title="Guardar todos los proyectos como JSON"
+                  aria-label="Guardar todos los proyectos como JSON"
+                >Guardar todos</button>
+                <button
+                  id="import-button"
+                  class="primary-button compact-action"
+                  type="button"
+                  title="Cargar proyectos JSON"
+                  aria-label="Cargar proyectos JSON"
+                >Cargar JSON</button>
+                <input id="import-file" type="file" accept="application/json,.json" multiple hidden />
+              </div>
+              <dl id="project-metadata" class="project-metadata"></dl>
+            </div>
           </header>
 
           <div id="board" class="board" aria-label="Tablero del proyecto"></div>
+
+          <section id="task-editor" class="task-editor" hidden aria-labelledby="task-editor-title">
+            <form id="task-form" class="task-form" novalidate>
+              <input id="task-id" name="id" type="hidden" />
+              <input id="task-column-id" name="columnId" type="hidden" />
+              <div class="task-editor__header">
+                <h3 id="task-editor-title">Nueva tarea</h3>
+                <button
+                  id="close-task-editor"
+                  class="icon-button"
+                  type="button"
+                  title="Cerrar"
+                  aria-label="Cerrar"
+                >x</button>
+              </div>
+
+              <label for="task-title">Titulo <span aria-hidden="true">*</span></label>
+              <input id="task-title" name="title" type="text" maxlength="160" required />
+
+              <label for="task-description">Descripcion</label>
+              <textarea id="task-description" name="description" rows="3" maxlength="1000"></textarea>
+
+              <div class="task-form__grid">
+                <div>
+                  <label for="task-priority">Prioridad</label>
+                  <select id="task-priority" name="priority">
+                    <option value="none">Sin prioridad</option>
+                    <option value="low">Baja</option>
+                    <option value="medium">Media</option>
+                    <option value="high">Alta</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="task-due-date">Vence</label>
+                  <input id="task-due-date" name="dueDate" type="date" />
+                </div>
+              </div>
+
+              <label for="task-labels">Etiquetas</label>
+              <input id="task-labels" name="labels" type="text" maxlength="300" placeholder="frontend, urgente" />
+
+              <div class="task-form__actions">
+                <button id="delete-task-button" class="danger-button" type="button" hidden>Eliminar</button>
+                <button class="secondary-button" type="button" id="cancel-task-button">Cancelar</button>
+                <button id="save-task-button" class="primary-button" type="submit">Guardar tarea</button>
+              </div>
+            </form>
+          </section>
         </section>
       </main>
     </div>
 
-    <noscript>Esta aplicación necesita JavaScript para funcionar.</noscript>
+    <noscript>Esta aplicacion necesita JavaScript para funcionar.</noscript>
     <script defer src="./src/namespace.js"></script>
     <script defer src="./src/shared/ids.js"></script>
     <script defer src="./src/shared/dates.js"></script>
     <script defer src="./src/domain/validation.js"></script>
     <script defer src="./src/domain/project-model.js"></script>
     <script defer src="./src/domain/column-model.js"></script>
+    <script defer src="./src/domain/task-model.js"></script>
     <script defer src="./src/core/state.js"></script>
     <script defer src="./src/core/errors.js"></script>
-    <script defer src="./src/persistence/database.js"></script>
-    <script defer src="./src/persistence/repositories/projects.js"></script>
-    <script defer src="./src/persistence/repositories/columns.js"></script>
-    <script defer src="./src/persistence/repositories/tasks.js"></script>
-    <script defer src="./src/persistence/repositories/settings.js"></script>
-    <script defer src="./src/persistence/project-unit-of-work.js"></script>
-    <script defer src="./src/domain/project-service.js"></script>
+    <script defer src="./src/persistence/task-unit-of-work.js"></script>
+    <script defer src="./src/persistence/project-transfer-service.js"></script>
     <script defer src="./src/ui/shell.js"></script>
     <script defer src="./src/ui/projects.js"></script>
     <script defer src="./src/ui/board.js"></script>
+    <script defer src="./src/ui/tasks.js"></script>
     <script defer src="./src/ui/feedback.js"></script>
     <script defer src="./src/core/app.js"></script>
     <script defer src="./src/main.js"></script>

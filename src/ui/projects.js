@@ -15,7 +15,7 @@ function createProjectButton(project, isActive) {
   text.className = "project-option__text";
 
   const name = document.createElement("strong");
-  name.textContent = project.name;
+  name.textContent = project.dirty ? `${project.name} *` : project.name;
   text.append(name);
 
   if (project.description) {
@@ -28,17 +28,23 @@ function createProjectButton(project, isActive) {
   return button;
 }
 
-function renderProjects(shell, projects, activeProject) {
+function renderProjects(shell, projects, activeProject, dirtyProjectIds = []) {
   const fragment = document.createDocumentFragment();
+  const dirtyIds = new Set(dirtyProjectIds);
 
   if (projects.length === 0) {
     const emptyMessage = document.createElement("p");
     emptyMessage.className = "project-list__empty";
-    emptyMessage.textContent = "Aún no hay proyectos.";
+    emptyMessage.textContent = "Aun no hay proyectos.";
     fragment.append(emptyMessage);
   } else {
     projects.forEach((project) => {
-      fragment.append(createProjectButton(project, project.id === activeProject?.id));
+      fragment.append(
+        createProjectButton(
+          { ...project, dirty: dirtyIds.has(project.id) },
+          project.id === activeProject?.id,
+        ),
+      );
     });
   }
 
