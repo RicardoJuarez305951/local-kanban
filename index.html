@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Kanban personal multi-proyecto con persistencia local."
+    />
+    <title>Kanban local</title>
+    <link rel="stylesheet" href="./styles/app.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="app" aria-busy="true">
+      <aside class="sidebar" aria-label="Proyectos">
+        <header class="brand">
+          <span class="brand__mark" aria-hidden="true">K</span>
+          <div>
+            <p class="eyebrow">Espacio personal</p>
+            <h1>Kanban local</h1>
+          </div>
+        </header>
+
+        <section class="project-picker" aria-labelledby="projects-title">
+          <div class="section-heading">
+            <h2 id="projects-title">Proyectos</h2>
+            <span id="project-count" class="count-badge">0</span>
+          </div>
+          <nav id="project-list" class="project-list" aria-label="Seleccionar proyecto"></nav>
+        </section>
+
+        <form id="project-form" class="project-form" novalidate>
+          <div class="section-heading">
+            <h2>Nuevo proyecto</h2>
+          </div>
+
+          <label for="project-name">Nombre <span aria-hidden="true">*</span></label>
+          <input id="project-name" name="name" type="text" maxlength="120" required />
+
+          <label for="project-description">Descripción</label>
+          <textarea
+            id="project-description"
+            name="description"
+            rows="2"
+            maxlength="500"
+          ></textarea>
+
+          <details>
+            <summary>Datos opcionales</summary>
+            <div class="optional-fields">
+              <label for="project-repository">Repositorio o referencia</label>
+              <input id="project-repository" name="repository" type="text" maxlength="500" />
+
+              <label for="project-path">Ruta local</label>
+              <input id="project-path" name="localPath" type="text" maxlength="500" />
+            </div>
+          </details>
+
+          <button id="create-project-button" class="primary-button" type="submit">
+            Crear proyecto
+          </button>
+        </form>
+
+        <p class="local-note">Los datos permanecen en este navegador.</p>
+      </aside>
+
+      <main class="main-content">
+        <div id="status-banner" class="status-banner" role="status" aria-live="polite" hidden></div>
+
+        <section id="loading-view" class="center-state" aria-live="polite">
+          <p class="eyebrow">Preparando espacio</p>
+          <h2>Cargando tus proyectos…</h2>
+        </section>
+
+        <section id="empty-view" class="center-state" hidden>
+          <span class="empty-icon" aria-hidden="true">＋</span>
+          <p class="eyebrow">Empieza aquí</p>
+          <h2>Crea tu primer proyecto</h2>
+          <p>Organiza cada iniciativa en un tablero independiente.</p>
+          <button id="focus-project-form" class="secondary-button" type="button">
+            Crear un proyecto
+          </button>
+        </section>
+
+        <section id="workspace-view" class="workspace" hidden>
+          <header class="workspace-header">
+            <div>
+              <p class="eyebrow">Proyecto activo</p>
+              <h2 id="active-project-name"></h2>
+              <p id="active-project-description" class="project-description" hidden></p>
+            </div>
+            <dl id="project-metadata" class="project-metadata"></dl>
+          </header>
+
+          <div id="board" class="board" aria-label="Tablero del proyecto"></div>
+        </section>
+      </main>
+    </div>
+
+    <noscript>Esta aplicación necesita JavaScript para funcionar.</noscript>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
